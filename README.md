@@ -6,7 +6,7 @@
 
 **Print shipping labels from A4/Letter PDFs straight to your thermal label printer, already cropped, rotated and sized to fit.**
 
-[![Release](https://img.shields.io/github/v/release/YOUR-USERNAME/labelprint?label=download)](https://github.com/YOUR-USERNAME/labelprint/releases/latest)
+[![Release](https://img.shields.io/github/v/release/jonasvdvbe/labelprint?label=download)](https://github.com/jonasvdvbe/labelprint/releases/latest)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0f6cbd)
 ![Go](https://img.shields.io/badge/Go-1.22%2B-00ADD8?logo=go&logoColor=white)
 ![No dependencies](https://img.shields.io/badge/runtime-none%20required-success)
@@ -39,7 +39,7 @@ Webshops and carriers (bpost, PostNL, DHL, DPD, UPS, GLS, Amazon, Bol, Vinted…
 
 ## 📥 Download & install
 
-Download the latest release from the [**Releases page**](https://github.com/YOUR-USERNAME/labelprint/releases/latest):
+Download the latest release from the [**Releases page**](https://github.com/jonasvdvbe/labelprint/releases/latest):
 
 | File | Use |
 |---|---|
@@ -136,7 +136,7 @@ Only one instance runs at a time; new files are handed to the window that's alre
 Requirements: **Go 1.22+**. No other Go dependencies (only the standard library), and you can build on Windows, Linux or macOS.
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/labelprint.git
+git clone https://github.com/jonasvdvbe/labelprint.git
 cd labelprint
 
 # Windows executable (cross-compiles from any OS)
