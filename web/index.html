@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LabelPrint</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><img src="icon.svg" alt="" width="26" height="26"><span>LabelPrint</span></div>
+  <div class="top-actions">
+    <button id="btnOpen" class="btn primary" title="Open PDF (Ctrl+O)">Open PDF…</button>
+    <button id="btnAdd" class="btn" title="Add another PDF to this batch">Add PDF…</button>
+    <input type="file" id="fileInput" accept="application/pdf,.pdf" multiple hidden>
+    <span id="docName" class="doc-name">No file loaded</span>
+  </div>
+  <div class="top-right">
+    <button id="hotChip" class="chip" hidden title="Watch folder is on – click to change"></button>
+    <button id="btnHelp" class="icon-btn" title="Help" aria-label="Help">?</button>
+    <button id="btnSettings" class="icon-btn" title="Settings" aria-label="Settings">
+      <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94a7.4 7.4 0 0 0 .05-.94 7.4 7.4 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7 7 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.49.42l-.36 2.54a7 7 0 0 0-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.4 7.4 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.38 1.05.7 1.63.94l.36 2.54a.5.5 0 0 0 .49.42h3.8a.5.5 0 0 0 .49-.42l.36-2.54a7 7 0 0 0 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- ======================= settings ======================= -->
+  <aside class="panel settings">
+    <section class="card">
+      <h2>Printer</h2>
+      <label class="field"><span>Printer</span>
+        <select id="printer"></select>
+      </label>
+      <label class="field" id="netHostRow" hidden><span>Printer IP address</span>
+        <input id="netHost" type="text" placeholder="192.168.1.50 or 192.168.1.50:9100">
+      </label>
+      <label class="field"><span>Print method / language</span>
+        <select id="lang"></select>
+      </label>
+      <p id="langHint" class="hint"></p>
+      <label class="field"><span>Label size</span>
+        <select id="size"></select>
+      </label>
+      <div class="row2" id="customSizeRow" hidden>
+        <label class="field"><span>Width (mm)</span><input id="wmm" type="number" min="10" max="300" step="0.1"></label>
+        <label class="field"><span>Height (mm)</span><input id="hmm" type="number" min="10" max="2000" step="0.1"></label>
+      </div>
+      <label class="field"><span>Printer resolution</span>
+        <select id="dpi">
+          <option value="203">203 dpi (8 dots/mm) – GK420d, most label printers</option>
+          <option value="300">300 dpi (12 dots/mm)</option>
+          <option value="600">600 dpi (24 dots/mm)</option>
+        </select>
+      </label>
+      <details class="more">
+        <summary>Advanced printer settings</summary>
+        <div class="row2">
+          <label class="field"><span>Darkness</span><input id="darkness" type="number" placeholder="printer default"></label>
+          <label class="field"><span>Speed</span><input id="speed" type="number" min="1" max="14" placeholder="default"></label>
+        </div>
+        <p class="hint" id="darkHint"></p>
+        <label class="field"><span>Media</span>
+          <select id="media">
+            <option value="">Printer default</option>
+            <option value="gap">Labels with gap</option>
+            <option value="mark">Labels with black mark</option>
+            <option value="continuous">Continuous roll</option>
+          </select>
+        </label>
+        <label class="field" id="gapRow"><span>Gap / mark size (mm)</span><input id="gapMM" type="number" min="0" max="20" step="0.5" value="3"></label>
+        <div class="row2">
+          <label class="field"><span>Shift right (mm)</span><input id="offX" type="number" step="0.5" value="0"></label>
+          <label class="field"><span>Shift down (mm)</span><input id="offY" type="number" step="0.5" value="0"></label>
+        </div>
+        <label class="check"><input id="flip" type="checkbox"> Rotate output 180° (labels come out upside down)</label>
+        <label class="field"><span>Black &amp; white conversion</span>
+          <select id="mono">
+            <option value="threshold">Sharp threshold – best for barcodes</option>
+            <option value="dither">Dithered – for photos / logos</option>
+          </select>
+        </label>
+        <label class="field"><span>Threshold <b id="thrVal"></b></span>
+          <input id="threshold" type="range" min="60" max="220" step="1" value="150">
+        </label>
+        <label class="check" id="zplRawRow"><input id="zplRaw" type="checkbox"> Send uncompressed ZPL (only if the printer misprints)</label>
+        <div class="btn-row">
+          <button id="btnTest" class="btn small">Print test label</button>
+          <button id="btnCalibrate" class="btn small">Calibrate media</button>
+        </div>
+      </details>
+    </section>
+
+  </aside>
+
+  <!-- ======================= page / crop ======================= -->
+  <section class="panel pageview">
+    <div class="toolbar">
+      <label class="field inline-field"><span>Crop</span><select id="cropMode"></select></label>
+      <label class="field inline-field"><span>Rotate</span>
+        <select id="rotation">
+          <option value="auto">Auto</option>
+          <option value="0">0°</option>
+          <option value="90">90° ↻</option>
+          <option value="180">180°</option>
+          <option value="270">90° ↺</option>
+        </select>
+      </label>
+      <label class="field inline-field"><span>Scale</span>
+        <select id="fit">
+          <option value="fit">Fit to label</option>
+          <option value="actual">Actual size (100%)</option>
+        </select>
+      </label>
+      <label class="field inline-field narrow"><span>Margin</span><input id="margin" type="number" min="0" max="20" step="0.5" value="1"><em>mm</em></label>
+      <button id="btnSavePreset" class="btn small" title="Save the current crop as a named preset (e.g. per carrier)">Save crop…</button>
+      <button id="btnDelPreset" class="btn small ghost" title="Delete selected preset" hidden>Delete preset</button>
+    </div>
+    <div id="stage" class="stage">
+      <div id="dropHint" class="drop-hint">
+        <div class="drop-icon">⤓</div>
+        <h3>Drop a shipping-label PDF here</h3>
+        <p>or click <b>Open PDF…</b> – A4/Letter pages are cropped to the label automatically.</p>
+      </div>
+      <div id="pageWrap" class="page-wrap" hidden>
+        <canvas id="pageCanvas"></canvas>
+        <div id="overlay" class="overlay"></div>
+      </div>
+    </div>
+    <div id="thumbs" class="thumbs"></div>
+  </section>
+
+  <!-- ======================= output ======================= -->
+  <aside class="panel output">
+    <div class="out-head">
+      <h2>Label preview</h2>
+      <span id="labelCount" class="muted"></span>
+    </div>
+    <div id="previews" class="previews"><p class="muted center">The printed result appears here.</p></div>
+    <div class="print-box">
+      <div class="row2">
+        <label class="field"><span>Copies</span><input id="copies" type="number" min="1" max="999" value="1"></label>
+        <label class="field"><span>&nbsp;</span>
+          <select id="exportSel">
+            <option value="">Export…</option>
+            <option value="png">Save labels as PNG</option>
+            <option value="prn">Save printer file (.zpl/.prn)</option>
+          </select>
+        </label>
+      </div>
+      <button id="btnPrint" class="btn primary big" disabled>Print</button>
+      <div id="printStatus" class="status"></div>
+    </div>
+  </aside>
+</main>
+
+<div id="toast" class="toast" hidden></div>
+
+<dialog id="settingsDlg" class="settings-dlg">
+  <div class="dlg-head">
+    <h2>Settings</h2>
+    <button class="icon-btn" id="btnCloseSettings" aria-label="Close">✕</button>
+  </div>
+  <div class="dlg-body">
+    <nav class="tabs" id="setTabs">
+      <button data-tab="general" class="active">General</button>
+      <button data-tab="watch">Watch folder</button>
+      <button data-tab="printing">Printing</button>
+      <button data-tab="windows">Windows</button>
+      <button data-tab="backup">Backup &amp; reset</button>
+      <button data-tab="about">About</button>
+    </nav>
+    <div class="tab-panels">
+      <section data-panel="general">
+        <label class="field"><span>Appearance</span>
+          <select id="prefTheme">
+            <option value="system">Same as Windows</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label class="field"><span>Crop mode used when a PDF is opened</span>
+          <select id="prefDefaultCrop">
+            <option value="">Keep the last used crop mode</option>
+          </select>
+        </label>
+        <label class="field"><span>Space around a detected label (mm)</span>
+          <input id="prefPad" type="number" min="0" max="10" step="0.5">
+        </label>
+        <label class="check"><input id="prefSkipEmpty" type="checkbox"> Skip empty pages automatically</label>
+      </section>
+
+      <section data-panel="watch" hidden>
+        <label class="check"><input id="hotEnabled" type="checkbox"> Open new PDFs from a folder automatically</label>
+        <label class="field"><span>Folder</span>
+          <div class="inline">
+            <input id="hotPath" type="text" placeholder="C:\Users\you\Downloads">
+            <button id="btnBrowse" class="btn small">Browse…</button>
+          </div>
+        </label>
+        <label class="field"><span>Only files whose name matches (optional)</span>
+          <input id="hotFilter" type="text" placeholder="e.g. label|etiket|verzend|shipment">
+        </label>
+        <label class="check"><input id="hotAuto" type="checkbox"> Print them immediately</label>
+        <p class="hint">Only works while LabelPrint is open. Tip: watch your Downloads folder and filter on “label|verzend” so every shipping label you download prints by itself.</p>
+      </section>
+
+      <section data-panel="printing" hidden>
+        <label class="field"><span>After printing</span>
+          <select id="prefAfterPrint">
+            <option value="none">Keep the document open</option>
+            <option value="clear">Clear the document</option>
+            <option value="close">Close LabelPrint</option>
+          </select>
+        </label>
+        <label class="field"><span>Ask for confirmation when a job has more than … labels (0 = never)</span>
+          <input id="prefConfirm" type="number" min="0" max="999" step="1">
+        </label>
+        <label class="check"><input id="prefNotify" type="checkbox"> Show a Windows notification when a label is printed automatically</label>
+        <label class="check"><input id="prefOpenWithPrint" type="checkbox"> PDFs opened with “Open in LabelPrint” are printed right away</label>
+      </section>
+
+      <section data-panel="windows" hidden>
+        <label class="check"><input id="shellInt" type="checkbox"> Add “Open in LabelPrint” and “Print label (LabelPrint)” to the right-click menu of PDF files</label>
+        <p class="hint">On Windows 11 they appear under “Show more options”. “Print label” prints straight away with the printer and crop settings you used last. The installer can set this up too.</p>
+        <div class="btn-row"><button id="btnDataDir" class="btn small">Open settings &amp; log folder</button></div>
+      </section>
+
+      <section data-panel="backup" hidden>
+        <p class="hint" style="margin:0 0 12px">Copy your printers, crop presets and settings to another PC, or start fresh.</p>
+        <div class="btn-row">
+          <button id="btnExportCfg" class="btn small">Export settings…</button>
+          <button id="btnImportCfg" class="btn small">Import settings…</button>
+          <input type="file" id="importInput" accept=".json,application/json" hidden>
+          <button id="btnResetCfg" class="btn small danger">Reset everything</button>
+        </div>
+      </section>
+
+      <section data-panel="about" hidden>
+        <div class="about">
+          <img src="icon.svg" width="56" height="56" alt="">
+          <div>
+            <b>LabelPrint</b> <span id="aboutVersion" class="muted"></span><br>
+            <span class="muted">Shipping labels from PDF to ZPL, EPL, TSPL and Windows label printers.</span><br>
+            <span class="muted">PDF rendering by pdf.js (Apache 2.0).</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</dialog>
+
+
+<dialog id="helpDlg">
+  <h2>LabelPrint – quick help</h2>
+  <ol>
+    <li><b>Choose your printer.</b> The print method is suggested from the driver name. Zebra (e.g. GK420d) → <b>ZPL</b>. TSC/Xprinter/Munbyn → <b>TSPL</b>. Old Zebra LP/TLP 2844 → <b>EPL2</b>. Dymo, Brother and anything else → <b>Windows driver</b> (set the label size in the driver's printing preferences).</li>
+    <li><b>Set the label size and resolution</b> (GK420d: 203 dpi, max 104 mm wide).</li>
+    <li><b>Open or drop a PDF.</b> The label is detected on each page. If the detection is wrong, pick a fixed area (e.g. “Top-left quarter”) or drag a rectangle on the page. Save it as a preset per carrier.</li>
+    <li>Check the preview on the right – that's exactly what will be printed – then press <b>Print</b> (Ctrl+P).</li>
+  </ol>
+  <p><b>Labels print shifted or skip a label?</b> Use <i>Calibrate media</i>, set <i>Media</i> to “Labels with gap”, or use the shift settings.</p>
+  <p><b>Open with…</b> You can right-click a PDF → Open with → LabelPrint.exe, or drag PDFs onto the .exe.</p>
+  <form method="dialog"><button class="btn primary">Close</button></form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

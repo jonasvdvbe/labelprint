@@ -253,6 +253,10 @@ func (a *App) routes() http.Handler {
 			w.Header().Set("Content-Type", "application/wasm")
 		}
 		w.Header().Set("Cache-Control", "no-cache")
+		if strings.HasPrefix(r.URL.Path, "/vendor/") {
+			serveVendor(w, r)
+			return
+		}
 		static.ServeHTTP(w, r)
 	}))
 
