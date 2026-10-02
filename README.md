@@ -6,7 +6,7 @@
 
 **Print shipping labels from A4/Letter PDFs straight to your thermal label printer, already cropped, rotated and sized to fit.**
 
-[![Release](https://img.shields.io/github/v/release/YOUR-USERNAME/labelprint?label=download)](https://github.com/YOUR-USERNAME/labelprint/releases/latest)
+[![Release](https://img.shields.io/github/v/release/labelprint/labelprint?label=download)](https://github.com/jonasvdvbe/labelprint/releases/latest)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0f6cbd)
 ![Go](https://img.shields.io/badge/Go-1.22%2B-00ADD8?logo=go&logoColor=white)
 ![No dependencies](https://img.shields.io/badge/runtime-none%20required-success)
@@ -35,11 +35,10 @@ Webshops and carriers (bpost, PostNL, DHL, DPD, UPS, GLS, Amazon, Bol, Vinted…
 - 🖱️ **Explorer integration**: *Open in LabelPrint* and *Print label* in the right-click menu of every PDF, plus "Open with"
 - ⚙️ **Settings for the details**: darkness, speed, media type, offsets, 180° flip, threshold or dithering, calibration, test label
 - 🌗 **Light & dark theme**, export/import of settings, notifications for automatic prints
-- 📦 **One small exe**: no .NET, Java or Python needed; per-user installer, no admin rights required
 
 ## 📥 Download & install
 
-Download the latest release from the [**Releases page**](https://github.com/YOUR-USERNAME/labelprint/releases/latest):
+Download the latest release from the [**Releases page**](https://github.com/jonasvdvbe/labelprint/releases/latest):
 
 | File | Use |
 |---|---|
@@ -136,7 +135,7 @@ Only one instance runs at a time; new files are handed to the window that's alre
 Requirements: **Go 1.22+**. No other Go dependencies (only the standard library), and you can build on Windows, Linux or macOS.
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/labelprint.git
+git clone https://github.com/jonasvdvbe/labelprint.git
 cd labelprint
 
 # Windows executable (cross-compiles from any OS)
@@ -175,38 +174,3 @@ x86_64-w64-mingw32-windres --preprocessor=cat -O coff -o rsrc_windows_amd64.syso
 └── docs/                 screenshots
 ```
 
-## 🗺️ Roadmap
-
-- [ ] Hosted web version (browser print dialog + Zebra Browser Print). See [Web version](#-web-version)
-- [ ] Code-signed releases
-- [ ] Dutch / French / German UI
-- [ ] Tray icon so the watch folder keeps working with the window closed
-- [ ] Carrier-specific presets out of the box
-
-## 🌐 Web version
-
-Everything except printing already runs in the browser, so LabelPrint could also be hosted as a static website. The catch is that **a website can't send raw data to a USB or port-9100 printer**. A hosted version would print through:
-
-| Option | Works with | Trade-off |
-|---|---|---|
-| Browser print dialog | Every printer | Label size must be set in the driver, scaling off |
-| Zebra Browser Print | Zebra | Requires Zebra's free local agent |
-| WebUSB | USB printers | Needs a generic USB driver instead of the vendor driver |
-| Local print helper | Every printer | Small background app still needs installing |
-
-These features stay desktop-only: the watch folder, the Explorer integration and direct RAW printing.
-
-## 🤝 Contributing
-
-Issues and pull requests are welcome. Especially useful:
-
-- **PDFs where detection gets it wrong.** Please remove personal data first, or describe the layout.
-- Reports from printer models not listed above.
-- Translations.
-
-Before opening a PR, please build both the Windows exe and the development build (`go vet ./... && GOOS=windows go vet ./...`).
-
-## 📄 License
-
-Released under the [MIT License](LICENSE).
-Bundles [pdf.js](https://github.com/mozilla/pdf.js) by Mozilla (Apache-2.0); see `web/vendor/PDFJS-LICENSE`.
