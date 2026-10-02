@@ -176,37 +176,6 @@ x86_64-w64-mingw32-windres --preprocessor=cat -O coff -o rsrc_windows_amd64.syso
 └── docs/                 screenshots
 ```
 
-## 🗺️ Roadmap
-
-- [ ] Hosted web version (browser print dialog + Zebra Browser Print). See [Web version](#-web-version)
-- [ ] Code-signed releases
-- [ ] Dutch / French / German UI
-- [ ] Tray icon so the watch folder keeps working with the window closed
-- [ ] Carrier-specific presets out of the box
-
-## 🌐 Web version
-
-Everything except printing already runs in the browser, so LabelPrint could also be hosted as a static website. The catch is that **a website can't send raw data to a USB or port-9100 printer**. A hosted version would print through:
-
-| Option | Works with | Trade-off |
-|---|---|---|
-| Browser print dialog | Every printer | Label size must be set in the driver, scaling off |
-| Zebra Browser Print | Zebra | Requires Zebra's free local agent |
-| WebUSB | USB printers | Needs a generic USB driver instead of the vendor driver |
-| Local print helper | Every printer | Small background app still needs installing |
-
-These features stay desktop-only: the watch folder, the Explorer integration and direct RAW printing.
-
-## 🤝 Contributing
-
-Issues and pull requests are welcome. Especially useful:
-
-- **PDFs where detection gets it wrong.** Please remove personal data first, or describe the layout.
-- Reports from printer models not listed above.
-- Translations.
-
-Before opening a PR, please build both the Windows exe and the development build (`go vet ./... && GOOS=windows go vet ./...`).
-
 ## 📄 License
 
 Released under the [MIT License](LICENSE).
